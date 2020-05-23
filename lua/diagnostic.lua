@@ -62,10 +62,12 @@ end
 function M.diagnostics_loclist(local_result)
   if local_result and local_result.diagnostics then
     for _, v in ipairs(local_result.diagnostics) do
-      v.uri = v.uri or local_result.uri
+      v.lnum = v.range.start.line + 1
+      v.col = v.range.start.character + 1
+      v.text = v.message
     end
   end
-  vim.lsp.util.set_loclist(vim.lsp.util.locations_to_items(local_result.diagnostics))
+  vim.lsp.util.set_loclist(local_result.diagnostics)
 end
 
 function M.publish_diagnostics(bufnr)
